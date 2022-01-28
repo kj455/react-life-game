@@ -1,11 +1,17 @@
 {
   "name": "react-life-game",
-  "version": "0.0.1",
+  "version": "0.0.3",
+  "files": [
+    "dist",
+    "types"
+  ],
   "main": "./dist/react-life-game.umd.js",
   "module": "./dist/react-life-game.es.js",
   "exports": {
-    "require": "./dist/react-life-game.umd.js",
-    "import": "./dist/react-life-game.es.js"
+    ".": {
+      "import": "./dist/react-life-game.es.js",
+      "require": "./dist/react-life-game.umd.js"
+    }
   },
   "scripts": {
     "dev": "vite",
