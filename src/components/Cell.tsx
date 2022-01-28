@@ -3,8 +3,8 @@ import { memo } from 'react';
 type Props = {
   isAlive: boolean;
   onClick: () => void;
-  aliveColor: string;
-  deadColor: string;
+  aliveColor?: string;
+  deadColor?: string;
 };
 
 export const Cell = memo<Props>(
