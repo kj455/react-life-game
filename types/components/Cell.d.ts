@@ -1,6 +1,7 @@
 /// <reference types="react" />
 declare type Props = {
     isAlive: boolean;
+    size: number;
     onClick: () => void;
     aliveColor?: string;
     deadColor?: string;

@@ -1,12 +1,20 @@
 import { useMemo } from 'react';
 import { useWindowSize } from './useWindowSize';
 
-const CELL_SIZE = 12; // px
-
-export const useCellNum = () => {
-  const { width, height } = useWindowSize();
-  const rows = useMemo(() => Math.ceil(height / CELL_SIZE), [height]);
-  const columns = useMemo(() => Math.ceil(width / CELL_SIZE), [width]);
+export const useCellNum = ({
+  width,
+  height,
+  size,
+}: {
+  width?: number;
+  height?: number;
+  size: number;
+}) => {
+  const { width: fullWidth, height: fullHeight } = useWindowSize();
+  const w = width || fullWidth;
+  const h = height || fullHeight;
+  const rows = useMemo(() => Math.ceil(h / size), [h]);
+  const columns = useMemo(() => Math.ceil(w / size), [w]);
   return {
     rows,
     columns,

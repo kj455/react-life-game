@@ -1,2 +1,2 @@
-export * from './components/Field';
-export * from './hooks/useKeyOnResize';
+export { LifeGameField } from './components/Field';
+export { useKeyOnResize } from './hooks/useKeyOnResize';

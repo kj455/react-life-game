@@ -1,23 +1,18 @@
 import { FC } from 'react';
+import { defaultOption } from '../const';
 import { useLifeGame } from '../hooks/useLifeGame';
-import { Cell } from './Cell';
+import { LifeGameOption } from '../types';
 
-export const LifeGameField: FC = () => {
-  const { cells, handleClickCell } = useLifeGame();
+type Props = {
+  option?: Partial<LifeGameOption>;
+};
+export const LifeGameField: FC<Props> = ({ option }) => {
+  const opt = { ...defaultOption, ...option };
+  const { renderLifeGame } = useLifeGame(opt);
 
   return (
-    <div style={{ overflow: 'hidden' }}>
-      {cells.map((row, i) => (
-        <div key={i} style={{ display: 'flex', flexDirection: 'row' }}>
-          {row.map((cell, j) => (
-            <Cell
-              key={j}
-              isAlive={cell}
-              onClick={() => handleClickCell(i, j)}
-            />
-          ))}
-        </div>
-      ))}
+    <div style={{ overflow: 'hidden', width: '100%', height: '100%' }}>
+      {renderLifeGame()}
     </div>
   );
 };

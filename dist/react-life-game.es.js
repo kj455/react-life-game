@@ -14,81 +14,14 @@ var __spreadValues = (a, b) => {
     }
   return a;
 };
-import require$$0, { useCallback, useState, useEffect, useMemo, memo } from "react";
-const useWindowSize = () => {
-  const getWindowSize = useCallback(() => {
-    var _a, _b;
-    return {
-      width: (_a = window == null ? void 0 : window.innerWidth) != null ? _a : 0,
-      height: (_b = window == null ? void 0 : window.innerHeight) != null ? _b : 0
-    };
-  }, []);
-  const [windowSizes, setWindowSizes] = useState(getWindowSize());
-  useEffect(() => {
-    const onResize = () => {
-      setWindowSizes(getWindowSize());
-    };
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
-  }, [getWindowSize]);
-  return windowSizes;
+import require$$0, { memo, useCallback, useState, useEffect, useMemo } from "react";
+const defaultOption = {
+  interval: 1e3,
+  cellSize: 12,
+  initialAliveRatio: 0.1,
+  aliveColor: "#1e3a8a",
+  deadColor: "#0f172b"
 };
-const CELL_SIZE = 12;
-const useCellNum = () => {
-  const { width, height } = useWindowSize();
-  const rows = useMemo(() => Math.ceil(height / CELL_SIZE), [height]);
-  const columns = useMemo(() => Math.ceil(width / CELL_SIZE), [width]);
-  return {
-    rows,
-    columns
-  };
-};
-const generate2DArray = (m2, n2, val = false) => {
-  return [...Array(m2)].map((_) => Array(n2).fill(val));
-};
-const generate2DArrayRandom = (m2, n2, initialAliveRatio) => {
-  const array = generate2DArray(m2, n2);
-  return array.map((row) => row.map((_) => Math.random() > 1 - initialAliveRatio));
-};
-const countAliveNeighbors = (arr, i, j) => {
-  var _a, _b, _c, _d, _e, _f, _g, _h;
-  return Number(((_a = arr[i - 1]) == null ? void 0 : _a[j - 1]) ? true : false) + Number(((_b = arr[i - 1]) == null ? void 0 : _b[j]) ? true : false) + Number(((_c = arr[i - 1]) == null ? void 0 : _c[j + 1]) ? true : false) + Number(((_d = arr[i]) == null ? void 0 : _d[j - 1]) ? true : false) + Number(((_e = arr[i]) == null ? void 0 : _e[j + 1]) ? true : false) + Number(((_f = arr[i + 1]) == null ? void 0 : _f[j - 1]) ? true : false) + Number(((_g = arr[i + 1]) == null ? void 0 : _g[j]) ? true : false) + Number(((_h = arr[i + 1]) == null ? void 0 : _h[j + 1]) ? true : false);
-};
-const nextCells = (array) => {
-  const next = [...array];
-  array.forEach((row, i) => {
-    row.forEach((currentCell, j) => {
-      const neighbors = countAliveNeighbors(array, i, j);
-      next[i][j] = currentCell ? neighbors === 2 || neighbors === 3 : neighbors === 3;
-    });
-  });
-  return next;
-};
-function useLifeGame({
-  width,
-  height,
-  interval = 1e3,
-  initialAliveRatio = 0.1
-} = {}) {
-  const { rows, columns } = useCellNum();
-  const [cells, setCells] = useState(generate2DArrayRandom(rows, columns, initialAliveRatio));
-  const handleClickCell = useCallback((i, j) => {
-    const cellsCopy = [...cells];
-    cellsCopy[i][j] = !cellsCopy[i][j];
-    setCells(cellsCopy);
-  }, [cells]);
-  useEffect(() => {
-    const id = setInterval(() => {
-      setCells(nextCells(cells));
-    }, interval);
-    return () => clearInterval(id);
-  }, [cells]);
-  return {
-    cells,
-    setCells,
-    handleClickCell
-  };
-}
 var jsxRuntime = { exports: {} };
 var reactJsxRuntime_production_min = {};
 /*
@@ -193,8 +126,10 @@ reactJsxRuntime_production_min.jsxs = q;
   jsxRuntime.exports = reactJsxRuntime_production_min;
 }
 const jsx = jsxRuntime.exports.jsx;
+const Fragment = jsxRuntime.exports.Fragment;
 const Cell = memo(({
   isAlive,
+  size,
   onClick,
   aliveColor = "#1e3a8a",
   deadColor = "#0f172b"
@@ -204,22 +139,97 @@ const Cell = memo(({
   };
   return /* @__PURE__ */ jsx("div", {
     style: __spreadValues({
-      width: "12px",
-      height: "12px",
+      width: `${size}px`,
+      height: `${size}px`,
       flexShrink: 0
     }, colorStyle),
     onClick
   });
 });
-const LifeGameField = () => {
+const useWindowSize = () => {
+  const getWindowSize = useCallback(() => {
+    var _a, _b;
+    return {
+      width: (_a = window == null ? void 0 : window.innerWidth) != null ? _a : 0,
+      height: (_b = window == null ? void 0 : window.innerHeight) != null ? _b : 0
+    };
+  }, []);
+  const [windowSizes, setWindowSizes] = useState(getWindowSize());
+  useEffect(() => {
+    const onResize = () => {
+      setWindowSizes(getWindowSize());
+    };
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, [getWindowSize]);
+  return windowSizes;
+};
+const useCellNum = ({
+  width,
+  height,
+  size
+}) => {
+  const { width: fullWidth, height: fullHeight } = useWindowSize();
+  const w = width || fullWidth;
+  const h = height || fullHeight;
+  const rows = useMemo(() => Math.ceil(h / size), [h]);
+  const columns = useMemo(() => Math.ceil(w / size), [w]);
+  return {
+    rows,
+    columns
+  };
+};
+const generate2DArray = (m2, n2, val = false) => {
+  return [...Array(m2)].map((_) => Array(n2).fill(val));
+};
+const generate2DArrayRandom = (m2, n2, initialAliveRatio) => {
+  const array = generate2DArray(m2, n2);
+  return array.map((row) => row.map((_) => Math.random() > 1 - initialAliveRatio));
+};
+const countAliveNeighbors = (arr, i, j) => {
+  var _a, _b, _c, _d, _e, _f, _g, _h;
+  return Number(((_a = arr[i - 1]) == null ? void 0 : _a[j - 1]) ? true : false) + Number(((_b = arr[i - 1]) == null ? void 0 : _b[j]) ? true : false) + Number(((_c = arr[i - 1]) == null ? void 0 : _c[j + 1]) ? true : false) + Number(((_d = arr[i]) == null ? void 0 : _d[j - 1]) ? true : false) + Number(((_e = arr[i]) == null ? void 0 : _e[j + 1]) ? true : false) + Number(((_f = arr[i + 1]) == null ? void 0 : _f[j - 1]) ? true : false) + Number(((_g = arr[i + 1]) == null ? void 0 : _g[j]) ? true : false) + Number(((_h = arr[i + 1]) == null ? void 0 : _h[j + 1]) ? true : false);
+};
+const nextCells = (array) => {
+  const next = [...array];
+  array.forEach((row, i) => {
+    row.forEach((currentCell, j) => {
+      const neighbors = countAliveNeighbors(array, i, j);
+      next[i][j] = currentCell ? neighbors === 2 || neighbors === 3 : neighbors === 3;
+    });
+  });
+  return next;
+};
+function useLifeGame({
+  width,
+  height,
+  cellSize = defaultOption.cellSize,
+  interval = defaultOption.interval,
+  initialAliveRatio = defaultOption.initialAliveRatio,
+  aliveColor = defaultOption.aliveColor,
+  deadColor = defaultOption.deadColor
+}) {
   const {
-    cells,
-    handleClickCell
-  } = useLifeGame();
-  return /* @__PURE__ */ jsx("div", {
-    style: {
-      overflow: "hidden"
-    },
+    rows,
+    columns
+  } = useCellNum({
+    width,
+    height,
+    size: cellSize
+  });
+  const [cells, setCells] = useState(generate2DArrayRandom(rows, columns, initialAliveRatio));
+  const handleClickCell = useCallback((i, j) => {
+    const cellsCopy = [...cells];
+    cellsCopy[i][j] = !cellsCopy[i][j];
+    setCells(cellsCopy);
+  }, [cells]);
+  useEffect(() => {
+    const id = setInterval(() => {
+      setCells(nextCells(cells));
+    }, interval);
+    return () => clearInterval(id);
+  }, [cells]);
+  const renderLifeGame = () => /* @__PURE__ */ jsx(Fragment, {
     children: cells.map((row, i) => /* @__PURE__ */ jsx("div", {
       style: {
         display: "flex",
@@ -227,9 +237,34 @@ const LifeGameField = () => {
       },
       children: row.map((cell, j) => /* @__PURE__ */ jsx(Cell, {
         isAlive: cell,
-        onClick: () => handleClickCell(i, j)
+        size: cellSize,
+        onClick: () => handleClickCell(i, j),
+        aliveColor,
+        deadColor
       }, j))
     }, i))
+  });
+  return {
+    cells,
+    setCells,
+    handleClickCell,
+    renderLifeGame
+  };
+}
+const LifeGameField = ({
+  option
+}) => {
+  const opt = __spreadValues(__spreadValues({}, defaultOption), option);
+  const {
+    renderLifeGame
+  } = useLifeGame(opt);
+  return /* @__PURE__ */ jsx("div", {
+    style: {
+      overflow: "hidden",
+      width: "100%",
+      height: "100%"
+    },
+    children: renderLifeGame()
   });
 };
 const useKeyOnResize = () => {

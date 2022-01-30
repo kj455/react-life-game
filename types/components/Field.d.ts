@@ -1,3 +1,8 @@
 import { FC } from 'react';
-export declare const LifeGameField: FC;
+import { LifeGameOption } from '../types';
+declare type Props = {
+    option?: Partial<LifeGameOption>;
+};
+export declare const LifeGameField: FC<Props>;
+export {};
 //# sourceMappingURL=Field.d.ts.map

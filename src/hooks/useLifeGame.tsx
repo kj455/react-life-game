@@ -1,7 +1,8 @@
 import { useState, useCallback, useEffect } from 'react';
+import { Cell } from '../components/Cell';
+import { defaultOption } from '../const';
+import { Field, LifeGameOption } from '../types';
 import { useCellNum } from './useCellNums';
-
-type Field = boolean[][];
 
 const generate2DArray = (m: number, n: number, val = false): Field => {
   return [...Array(m)].map((_) => Array(n).fill(val));
@@ -45,19 +46,16 @@ const nextCells = (array: Field): Field => {
   return next;
 };
 
-type LifeGameOption = {
-  width?: number;
-  height?: number;
-  interval?: number;
-  initialAliveRatio?: number;
-};
 export function useLifeGame({
   width,
   height,
-  interval = 1000,
-  initialAliveRatio = 0.1,
-}: LifeGameOption = {}) {
-  const { rows, columns } = useCellNum();
+  cellSize = defaultOption.cellSize,
+  interval = defaultOption.interval,
+  initialAliveRatio = defaultOption.initialAliveRatio,
+  aliveColor = defaultOption.aliveColor,
+  deadColor = defaultOption.deadColor,
+}: LifeGameOption) {
+  const { rows, columns } = useCellNum({ width, height, size: cellSize });
   const [cells, setCells] = useState(
     generate2DArrayRandom(rows, columns, initialAliveRatio)
   );
@@ -78,9 +76,28 @@ export function useLifeGame({
     return () => clearInterval(id);
   }, [cells]);
 
+  const renderLifeGame = () => (
+    <>
+      {cells.map((row, i) => (
+        <div key={i} style={{ display: 'flex', flexDirection: 'row' }}>
+          {row.map((cell, j) => (
+            <Cell
+              key={j}
+              isAlive={cell}
+              size={cellSize}
+              onClick={() => handleClickCell(i, j)}
+              aliveColor={aliveColor}
+              deadColor={deadColor}
+            />
+          ))}
+        </div>
+      ))}
+    </>
+  );
   return {
     cells,
     setCells,
     handleClickCell,
+    renderLifeGame,
   };
 }
