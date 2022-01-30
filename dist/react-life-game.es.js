@@ -131,8 +131,8 @@ const Cell = memo(({
   isAlive,
   size,
   onClick,
-  aliveColor = "#1e3a8a",
-  deadColor = "#0f172b"
+  aliveColor = defaultOption.aliveColor,
+  deadColor = defaultOption.deadColor
 }) => {
   const colorStyle = {
     backgroundColor: isAlive ? aliveColor : deadColor

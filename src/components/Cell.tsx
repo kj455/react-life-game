@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { defaultOption } from '../const';
 
 type Props = {
   isAlive: boolean;
@@ -13,8 +14,8 @@ export const Cell = memo<Props>(
     isAlive,
     size,
     onClick,
-    aliveColor = '#1e3a8a',
-    deadColor = '#0f172b',
+    aliveColor = defaultOption.aliveColor,
+    deadColor = defaultOption.deadColor,
   }) => {
     const colorStyle = { backgroundColor: isAlive ? aliveColor : deadColor };
     return (
