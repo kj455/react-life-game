@@ -72,8 +72,8 @@ export function useLifeGame({
   // re-render on window resize
   useLayoutEffect(() => {
     const onResize = () => {
-      const rows = Math.ceil(window.innerHeight / cellSize);
-      const columns = Math.ceil(window.innerWidth / cellSize);
+      const rows = Math.ceil((width ?? window.innerHeight) / cellSize);
+      const columns = Math.ceil((height ?? window.innerWidth) / cellSize);
       setCells(generate2DArrayRandom(rows, columns, initialAliveRatio));
     };
     window.addEventListener('resize', onResize);

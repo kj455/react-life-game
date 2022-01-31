@@ -225,8 +225,8 @@ function useLifeGame({
   }, [cells]);
   useLayoutEffect(() => {
     const onResize = () => {
-      const rows2 = Math.ceil(window.innerHeight / cellSize);
-      const columns2 = Math.ceil(window.innerWidth / cellSize);
+      const rows2 = Math.ceil((width != null ? width : window.innerHeight) / cellSize);
+      const columns2 = Math.ceil((height != null ? height : window.innerWidth) / cellSize);
       setCells(generate2DArrayRandom(rows2, columns2, initialAliveRatio));
     };
     window.addEventListener("resize", onResize);
