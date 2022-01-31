@@ -191,7 +191,7 @@ const countAliveNeighbors = (arr, i, j) => {
   return Number(((_a = arr[i - 1]) == null ? void 0 : _a[j - 1]) ? true : false) + Number(((_b = arr[i - 1]) == null ? void 0 : _b[j]) ? true : false) + Number(((_c = arr[i - 1]) == null ? void 0 : _c[j + 1]) ? true : false) + Number(((_d = arr[i]) == null ? void 0 : _d[j - 1]) ? true : false) + Number(((_e = arr[i]) == null ? void 0 : _e[j + 1]) ? true : false) + Number(((_f = arr[i + 1]) == null ? void 0 : _f[j - 1]) ? true : false) + Number(((_g = arr[i + 1]) == null ? void 0 : _g[j]) ? true : false) + Number(((_h = arr[i + 1]) == null ? void 0 : _h[j + 1]) ? true : false);
 };
 const nextCells = (array) => {
-  const next = [...array];
+  const next = array.map((row) => row.map((cell) => cell));
   array.forEach((row, i) => {
     row.forEach((currentCell, j) => {
       const neighbors = countAliveNeighbors(array, i, j);

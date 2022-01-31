@@ -19,7 +19,7 @@ const generate2DArrayRandom = (
   );
 };
 
-const countAliveNeighbors = (arr: Field, i: number, j: number): number => {
+const countAliveNeighbors = (arr: Field, i: number, j: number) => {
   return (
     // prettier-ignore
     Number(arr[i - 1]?.[j - 1] ? true : false) +
@@ -34,7 +34,7 @@ const countAliveNeighbors = (arr: Field, i: number, j: number): number => {
 };
 
 const nextCells = (array: Field): Field => {
-  const next = [...array];
+  const next = array.map((row) => row.map((cell) => cell));
   array.forEach((row, i) => {
     row.forEach((currentCell, j) => {
       const neighbors = countAliveNeighbors(array, i, j);
