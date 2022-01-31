@@ -14,7 +14,7 @@ var __spreadValues = (a, b) => {
     }
   return a;
 };
-import require$$0, { memo, useCallback, useState, useEffect, useMemo } from "react";
+import require$$0, { memo, useCallback, useState, useEffect, useMemo, useLayoutEffect } from "react";
 const defaultOption = {
   interval: 1e3,
   cellSize: 12,
@@ -223,6 +223,17 @@ function useLifeGame({
     cellsCopy[i][j] = !cellsCopy[i][j];
     setCells(cellsCopy);
   }, [cells]);
+  useLayoutEffect(() => {
+    const onResize = () => {
+      const rows2 = Math.ceil(window.innerHeight / cellSize);
+      const columns2 = Math.ceil(window.innerWidth / cellSize);
+      setCells(generate2DArrayRandom(rows2, columns2, initialAliveRatio));
+    };
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+    };
+  }, []);
   useEffect(() => {
     const id = setInterval(() => {
       setCells(nextCells(cells));
@@ -267,17 +278,4 @@ const LifeGameField = ({
     children: renderLifeGame()
   });
 };
-const useKeyOnResize = () => {
-  const [width, setWidth] = useState(window.innerWidth);
-  useEffect(() => {
-    const onResize = () => setWidth(window.innerWidth);
-    window.addEventListener("resize", onResize);
-    return () => {
-      window.removeEventListener("resize", onResize);
-    };
-  }, []);
-  return {
-    key: width
-  };
-};
-export { LifeGameField, useKeyOnResize };
+export { LifeGameField };

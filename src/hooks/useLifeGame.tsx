@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { Cell } from '../components/Cell';
 import { defaultOption } from '../const';
 import { Field, LifeGameOption } from '../types';
@@ -69,6 +69,20 @@ export function useLifeGame({
     [cells]
   );
 
+  // re-render on window resize
+  useLayoutEffect(() => {
+    const onResize = () => {
+      const rows = Math.ceil(window.innerHeight / cellSize);
+      const columns = Math.ceil(window.innerWidth / cellSize);
+      setCells(generate2DArrayRandom(rows, columns, initialAliveRatio));
+    };
+    window.addEventListener('resize', onResize);
+    return () => {
+      window.removeEventListener('resize', onResize);
+    };
+  }, []);
+
+  // calculate next generation periodically
   useEffect(() => {
     const id = setInterval(() => {
       setCells(nextCells(cells));

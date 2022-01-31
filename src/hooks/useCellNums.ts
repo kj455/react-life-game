@@ -15,6 +15,7 @@ export const useCellNum = ({
   const h = height || fullHeight;
   const rows = useMemo(() => Math.ceil(h / size), [h]);
   const columns = useMemo(() => Math.ceil(w / size), [w]);
+
   return {
     rows,
     columns,
