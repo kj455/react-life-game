@@ -2,7 +2,7 @@
 
 A React component that renders "Conway's Game of Life".
 
-![lifegame](https://user-images.githubusercontent.com/38521709/151694896-8fd8d457-5c9d-411d-bd38-80d0a372c078.gif)
+![lifegame](https://user-images.githubusercontent.com/38521709/151740215-103ad0cf-15e5-4cf3-9e7d-67c136d67672.gif)
 
 ## Installation
 
