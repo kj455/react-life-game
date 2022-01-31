@@ -18,7 +18,7 @@ import require$$0, { memo, useCallback, useState, useEffect, useMemo } from "rea
 const defaultOption = {
   interval: 1e3,
   cellSize: 12,
-  initialAliveRatio: 0.1,
+  initialAliveRatio: 0.12,
   aliveColor: "#1e3a8a",
   deadColor: "#0f172b"
 };

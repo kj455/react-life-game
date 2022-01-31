@@ -44,7 +44,7 @@ function App() {
 
 | option            | type   | description                                                                                   | default            |
 | ----------------- | ------ | --------------------------------------------------------------------------------------------- | ------------------ |
-| initialAliveRatio | number | Ratio of living cells in the initial state ([0,1])                                            | 0.1                |
+| initialAliveRatio | number | Ratio of living cells in the initial state ([0,1])                                            | 0.12               |
 | interval          | number | Time per each generation ([ms])                                                               | 1000               |
 | aliveColor        | string | Color of living cells ( can be any color that "css" can accept. i.e. `blue`, `#1e3a8a`, ... ) | #1e3a8a            |
 | deadColor         | string | Color of dead cells ( can be any color that "css" can accept. i.e. `blue`, `#1e3a8a`, ... )   | #0f172b            |
